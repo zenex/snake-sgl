@@ -1,0 +1,6 @@
+#+Title: RiskVector
+#+Author: XIGMA.LINK
+
+
+[[http://www.gnu.org/licenses/gpl-3.0.html][http://img.shields.io/:license-mit-blue.svg]]
+* THIS IS A BACKUP REPO
