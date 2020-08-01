@@ -66,3 +66,5 @@ GPATH
 ##############################
 *.a
 
+snake-sgl
+.gitignore

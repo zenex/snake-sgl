@@ -1,6 +1,40 @@
-#+Title: RiskVector
-#+Author: XIGMA.LINK
+#+Title: [[https://neohex.xyz/projects/?nav=snake-sgl][Snake-SGL]]
+#+Author: AlexHG @ NEOHEX.XYZ
+#+OPTIONS: \n:t
+
+* Snake-SGL: the ultimate snake clone
+  Snake-SGL™ is an award winning realtime puzzle arcade singleplayer simulation game "inspired" by the legendary "snake" game made by Nokia. A re-imagining of the classic that captivated the world, the critically acclaimed spiritual successor shook the gaming community with its original theme and inventive gameplay that revolutionized the entire industry.
+
+  This program was made as an example application for the [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]] rendering engine. 
+
+* System Requirements
+  OS: Any modern UNIX system
+  RAM: 256MB
+  CPU: Yes
+
+* Preview
+  https://i.imgur.com/22SC1k2.gif
+
+* Installation
+  1. Install the [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]] dependencies
+
+  For Debia/Ubuntu systems:
+  #+BEGIN_SRC 
+  sudo apt-get update
+  sudo apt-get install libsdl2-dev libglew-dev libfreetype6-dev
+  #+END_SRC
+  For Arch based systems:
+  #+BEGIN_SRC 
+  sudo pacman -S sdl2 glew freetype2
+  #+END_SRC
+
+  2. Clone the Snake-SGL repo & play
+  #+BEGIN_SRC 
+  git clone https://github.com/zenex/snake-sgl
+  cd snake-sgl/
+  make
+  ./snake-sgl
+  #+END_SRC
 
 
-[[http://www.gnu.org/licenses/gpl-3.0.html][http://img.shields.io/:license-mit-blue.svg]]
-* THIS IS A BACKUP REPO
+  Visit [[https://neohex.xyz/projects/?nav=skeletongl][NEOHEX.XYZ]] for more information.
