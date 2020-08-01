@@ -13,7 +13,7 @@
   CPU: Yes
 
 * Preview
-  https://i.imgur.com/22SC1k2.gif
+  #+html: <p align="center"><img src="https://i.imgur.com/22SC1k2.gif" /></p>
 
 * Installation
   1. Install the [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]] dependencies
