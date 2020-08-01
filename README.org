@@ -9,7 +9,9 @@
 
 * System Requirements
   OS: Any modern UNIX system
+
   RAM: 256MB
+
   CPU: Yes
 
 * Preview
