@@ -1,19 +1,13 @@
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-// Author:  AlexHG @ NEOHEX.XYZ
+// Author:  AlexHG @ ZEN3X.COM
 // License: MIT License
-// Website: https://neohex.xyz
+// Website: https://ZEN3X.COM
 
 
 /**
  *  @file    src/skeletonGL/SGL_Window.hpp
- *  @author  TSURA @ NEOHEX.XYZ
- *  @date    9/4/2018
- *  @version 1.0
+ *  @author  AlexHG @ ZEN3X.COM
+ *  @date    05/11/2020
+ *  @version 1.92
  *
  *  @brief Main window manager, acts as the SGL framework's interface
  *
@@ -214,6 +208,7 @@ public:
     void setChaosEffect(bool chaos);
     // Enable confuse effect?
     void setConfuseEffect(bool confuse);
+    void toggleLineAA(bool toggle);
 
     // FPS
     // Begin counting frame time

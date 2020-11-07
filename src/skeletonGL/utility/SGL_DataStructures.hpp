@@ -1,17 +1,12 @@
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-// Author:  AlexHG @ NEOHEX.XYZ
+// Author:  AlexHG @ ZEN3X.COM
 // License: MIT License
-// Website: https://neohex.xyz
+// Website: https://ZEN3X.COM
+
 /**
  * @file    src/skeletonGL/utility/SGL_DataStructures.cpp
- * @author  TSURA @ NEOHEX.XYZ
- * @date    9/4/2018
- * @version 1.0
+ * @author  AlexHG @ ZEN3X.COM
+ * @date    05/11/2020
+ * @version 1.92
  *
  * @brief Contains most of the data structures used by SkeletonGL
  *
@@ -37,6 +32,7 @@
 
 // PRE-PROCESSOR COMPILATION OPTIONS
 // #define SGL_OUTPUT_OPENGL_DETAILS true ///< Enables (extra) OpenGLManager output. Useful for debugging.
+// #define SGL_CHECK_FOR_ERRORS_ON_RENDER false
 
 /**
  * @brief General purpose
@@ -50,6 +46,27 @@ namespace SGL
     // Default texture name, used by both the AssetManager and the SGL_Renderer
     const std::string DEFAULT_TEXTURE_NAME = "default_texture";
 }
+
+/**
+ * @brief Suble OpenGL API constants, to avoid feeding wrong data to the GPU
+ */
+namespace SGL_OGL_CONSTANTS
+{
+    // GL_LINES uses this value top set the line's width, note that if AA is enabled it limits the linw width
+    // support to 1.0f
+    const float MAX_LINE_WIDTH = 20.0f;
+    const float MIN_LINE_WIDTH = 1.0f;
+
+    const float MAX_PIXEL_SIZE = 20.0f;
+    const float MIN_PIXEL_SIZE = 1.0f;
+
+    // These rendering consatants are the maximum amount of simultaneous instances to be rendered in a batch
+    // and MUST NOT BE EXCEEDED
+    const std::uint32_t MAX_SPRITE_BATCH_INSTANCES = 10000;
+    const std::uint32_t MAX_PIXEL_BATCH_INSTANCES = 10000;
+    const std::uint32_t MAX_LINE_BATCH_INSTANCES = 10000;
+};
+
 
 
 /**
@@ -149,20 +166,53 @@ struct SGL_Color
 };
 
 /**
+ * @brief Represents a single keystate
+ */
+struct SGL_InputKey
+{
+    GLboolean pressed, released;
+    SGL_InputKey() : pressed(false), released(false) {}
+};
+
+/**
+ * @brief Encapsulates an internal event (window events, UNIX system signals etc.)
+ */
+struct SGL_InternalEvent
+{
+    GLboolean active;
+
+    SGL_InternalEvent() : active(false) {}
+};
+
+/**
+ * @brief Represents a mouse
+ */
+struct SGL_InputMouse
+{
+    // Mouse scroll wheel is treated like a button, pressed = rolling in that direction
+    SGL_InputKey rightBtn, leftBtn, middleBtn, scrollDown, scrollUp;
+    std::int32_t cursorX, cursorY, cursorXNormalized, cursorYNormalized;
+
+    SGL_InputMouse() : cursorX(0), cursorY(0), cursorXNormalized(0), cursorYNormalized(0) {}
+};
+
+/**
  * @brief Represents the entire input state (and some helpful events) of a single frame
  */
 struct SGL_InputFrame
 {
-    GLboolean up, down, left, right;                                                   ///< Arrow keys
-    GLboolean q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;                     ///< Letter keys
-    GLboolean num1, num2, num3, num4, num5, num6, num7, num8, num9;                    ///< Upper numbers
-    GLboolean mouseRightPressed, mouseRightReleased, mouseLeftPressed, mouseLeftReleased,
-        mouseMiddleReleased, mouseMiddlePressed, mouseScrollUp, mouseScrollDown;   ///< Mouse buttons
-    GLint rawMousePosX, rawMousePosY, normalizedMousePosX, normalizedMousePosY;        ///< Mouse position + normalized to internal resolution
-    GLboolean sdlInternalQuit;                                                         ///< Internal SDL exit event
-    GLboolean esc, space, enter, backspace, ctrl, shift, alt;                          ///< Modifiers
-    GLboolean mouseFocus, keyboardFocus, windowFocus, windowMinimized, windowRestored; ///< Window state
-    SGL_InputFrame() : q(false), w(false), e(false), r(false), t(false), y(false), u(false), i(false), o(false), p(false), a(false), s(false), d(false), f(false), g(false), h(false), j(false), k(false), l(false), z(false), x(false), c(false), v(false), b(false), n(false), m(false), num1(false), num2(false), num3(false), num4(false), num5(false), num6(false), num7(false), num8(false), num9(false), up(false), down(false), left(false), right(false), esc(false), space(false), enter(false), backspace(false), ctrl(false), shift(false),  alt(false), sdlInternalQuit(false), mouseLeftPressed(false), mouseLeftReleased(false), mouseRightPressed(false), mouseRightReleased(false), mouseMiddlePressed(false), mouseMiddleReleased(false), mouseScrollUp(false), mouseScrollDown(false), mouseFocus(false),  keyboardFocus(false), windowFocus(false), windowMinimized(false), windowRestored(false) {}
+    // Keyboard
+    SGL_InputKey up, down, left, right;                                                   ///< Arrow keys
+    SGL_InputKey q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;                     ///< Letter keys
+    SGL_InputKey num1, num2, num3, num4, num5, num6, num7, num8, num9;                    ///< Upper numbers
+    SGL_InputKey esc, space, enter, backspace, ctrl, shift, alt;                          ///< Modifiers
+
+    // Mouse
+    SGL_InputMouse mouse;
+
+    // Events
+    SGL_InternalEvent sdlInternalQuit;                                                         ///< Internal SDL exit event
+    SGL_InternalEvent mouseFocus, keyboardFocus, windowFocus, windowMinimized, windowRestored; ///< Window state
 };
 
 /**
@@ -271,6 +321,10 @@ enum BLENDING_TYPE
     SPRITE_RENDERING,   // DEFAULT OF SGL_SPRITE
     TEXT_RENDERING,     // DEFAULT TO THE SGL_RENDERER TEXT RENDERER
     PARTICLE_RENDERING, // FOR PARTICLES
+    INVISIBLE_RENDERING,
+    TEST_RENDERING_1,
+    TEST_RENDERING_2,
+    TEST_RENDERING_3
 };
 
 enum OPENGL_BLENDING_MODES

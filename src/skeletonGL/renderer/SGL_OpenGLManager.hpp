@@ -1,18 +1,12 @@
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-// Author:  AlexHG @ NEOHEX.XYZ
+// Author:  AlexHG @ ZEN3X.COM
 // License: MIT License
-// Website: https://neohex.xyz
+// Website: https://ZEN3X.COM
 
 /**
  * @file    src/skeletonGL/utility/SGL_OpenGLManager.hpp
- * @author  TSURA @ NEOHEX.XYZ
- * @date    9/4/2018
- * @version 1.0
+ * @author  AlexHG @ ZEN3X.COM
+ * @date    05/11/2020
+ * @version 1.92
  *
  * @brief Encapsulates ALL OpenGL related function calls and manages its resources
  *
@@ -212,6 +206,11 @@ public:
     void frameBufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level) const noexcept;
     // Render framebuffer
     void blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) const noexcept;
+
+    // Set the width (float) for GL_LINES
+    void lineWidth(GLfloat width) const noexcept;
+    void pixelSize(GLfloat size) const noexcept;
+
     // Checks the current FBO status
     GLenum checkFrameBufferStatus(GLenum target) const noexcept;
     // Resize the viewport
@@ -226,6 +225,11 @@ public:
     int totalEBO() const noexcept;
     // Total amount of active FBO for this OpenGL context
     int totalFBO() const noexcept;
+
+    // En / Dis able OpenGL capabilities
+    void enable(GLenum cap) const noexcept;
+    void disable(GLenum cap) const noexcept;
+    // void toggleLineAA(bool toggle) const noexcept;
 };
 
 #endif // SRC_SKELETONGL_RENDERER_OPENGLMANAGER_HPP

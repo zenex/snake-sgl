@@ -1,12 +1,7 @@
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-// Author:  AlexHG @ NEOHEX.XYZ
+// Author:  AlexHG @ ZEN3X.COM
 // License: MIT License
-// Website: https://neohex.xyz
+// Website: https://ZEN3X.COM
+
 
 #include "window.hpp"
 
@@ -272,34 +267,34 @@ void Window::input(GAME_STATE gameState)
     {
     case GAME_STATE::INTRO_SEQUENCE:
     {
-        if (desiredKeys.enter && !pDeltaInput.enter)
+        if (desiredKeys.enter.pressed && !pDeltaInput.enter.pressed)
         {
             pGameState = GAME_STATE::START_SCREEN_MENU;
         }
-        if (desiredKeys.esc && !pDeltaInput.esc)
+        if (desiredKeys.esc.pressed && !pDeltaInput.esc.pressed)
             pMainLoopActive = false;
         break;
     }
     case GAME_STATE::START_SCREEN_MENU:
     {
-        if (desiredKeys.esc && !pDeltaInput.esc)
+        if (desiredKeys.esc.pressed && !pDeltaInput.esc.pressed)
             pMainLoopActive = false;
 
-        if (desiredKeys.down && !pDeltaInput.down)
+        if (desiredKeys.down.pressed && !pDeltaInput.down.pressed)
         {
             pMenuCursor++;
             if (pMenuCursor >= static_cast<int8_t>(MENU_START_SCREEN_SELECTION::END_ENUM))
                 pMenuCursor = 0;
 
         }
-        if (desiredKeys.up && !pDeltaInput.up)
+        if (desiredKeys.up.pressed && !pDeltaInput.up.pressed)
         {
             pMenuCursor--;
             if (pMenuCursor < 0)
                 pMenuCursor = (static_cast<int8_t>(MENU_START_SCREEN_SELECTION::END_ENUM) - 1);
 
         }
-        if (desiredKeys.enter && !pDeltaInput.enter)
+        if (desiredKeys.enter.pressed && !pDeltaInput.enter.pressed)
         {
             this->processMenu(GAME_STATE::START_SCREEN_MENU, pMenuCursor);
         }
@@ -307,24 +302,24 @@ void Window::input(GAME_STATE gameState)
     }
     case GAME_STATE::SETTINGS_MENU:
     {
-        if (desiredKeys.esc && !pDeltaInput.esc)
+        if (desiredKeys.esc.pressed && !pDeltaInput.esc.pressed)
             pMainLoopActive = false;
 
-        if (desiredKeys.down && !pDeltaInput.down)
+        if (desiredKeys.down.pressed && !pDeltaInput.down.pressed)
         {
             pMenuCursor++;
             if (pMenuCursor >= static_cast<int8_t>(MENU_SETTINGS_SELECTION::END_ENUM))
                 pMenuCursor = 0;
 
         }
-        if (desiredKeys.up && !pDeltaInput.up)
+        if (desiredKeys.up.pressed && !pDeltaInput.up.pressed)
         {
             pMenuCursor--;
             if (pMenuCursor < 0)
                 pMenuCursor = (static_cast<int8_t>(MENU_SETTINGS_SELECTION::END_ENUM) - 1);
 
         }
-        if (desiredKeys.enter && !pDeltaInput.enter)
+        if (desiredKeys.enter.pressed && !pDeltaInput.enter.pressed)
         {
             this->processMenu(GAME_STATE::SETTINGS_MENU, pMenuCursor);
         }
@@ -332,7 +327,7 @@ void Window::input(GAME_STATE gameState)
     }
     case GAME_STATE::CREDITS_MENU:
     {
-        if (desiredKeys.enter && !pDeltaInput.enter)
+        if (desiredKeys.enter.pressed && !pDeltaInput.enter.pressed)
         {
             this->processMenu(GAME_STATE::CREDITS_MENU, 0);
         }
@@ -340,42 +335,42 @@ void Window::input(GAME_STATE gameState)
     }
     case GAME_STATE::IN_GAME:
     {
-        if (desiredKeys.esc && !pDeltaInput.esc)
+        if (desiredKeys.esc.pressed && !pDeltaInput.esc.pressed)
             pGameState = GAME_STATE::GAME_PAUSED;
 
         // Send input to the player
         //player1->input(desiredKeys);
 
-        if (desiredKeys.mouseMiddleReleased)
+        if (desiredKeys.mouse.middleBtn.pressed)
             SGL_Log("scroll up");
-        if (desiredKeys.mouseMiddlePressed)
+        if (desiredKeys.mouse.middleBtn.pressed)
             SGL_Log("scroll down");
 
-        if (desiredKeys.mouseLeftPressed)
+        if (desiredKeys.mouse.leftBtn.pressed)
             pMouseLeftHeld = true;
-        if (desiredKeys.mouseLeftReleased)
+        if (desiredKeys.mouse.leftBtn.pressed)
             pMouseLeftHeld = false;
 
-        if (desiredKeys.up && !pDeltaInput.up)
+        if (desiredKeys.up.pressed && !pDeltaInput.up.pressed)
             pGameGrid->moveSnake(DIRECTION::UP);
-        if (desiredKeys.down && !pDeltaInput.down)
+        if (desiredKeys.down.pressed && !pDeltaInput.down.pressed)
             pGameGrid->moveSnake(DIRECTION::DOWN);
-        if (desiredKeys.left && !pDeltaInput.left)
+        if (desiredKeys.left.pressed && !pDeltaInput.left.pressed)
             pGameGrid->moveSnake(DIRECTION::LEFT);
-        if (desiredKeys.right && !pDeltaInput.right)
+        if (desiredKeys.right.pressed && !pDeltaInput.right.pressed)
             pGameGrid->moveSnake(DIRECTION::RIGHT);
 
         break;
     }
     case GAME_STATE::GAME_PAUSED:
     {
-        if (desiredKeys.esc && !pDeltaInput.esc)
+        if (desiredKeys.esc.pressed && !pDeltaInput.esc.pressed)
             pGameState = GAME_STATE::IN_GAME;
-        if (desiredKeys.m && !pDeltaInput.m)
+        if (desiredKeys.m.pressed && !pDeltaInput.m.pressed)
         {
             this->processMenu(GAME_STATE::IN_GAME, static_cast<uint8_t>(MENU_IN_GAME_OPTIONS::BACK_TO_MAIN_MENU));
         }
-        if (desiredKeys.q && !pDeltaInput.q)
+        if (desiredKeys.q.pressed && !pDeltaInput.q.pressed)
         {
             this->pMainLoopActive = false;
         }
@@ -383,15 +378,15 @@ void Window::input(GAME_STATE gameState)
     }
     case GAME_STATE::GAME_OVER:
     {
-        if (desiredKeys.m && !pDeltaInput.m)
+        if (desiredKeys.m.pressed && !pDeltaInput.m.pressed)
         {
             this->processMenu(GAME_STATE::IN_GAME, static_cast<uint8_t>(MENU_IN_GAME_OPTIONS::BACK_TO_MAIN_MENU));
         }
-        if (desiredKeys.q && !pDeltaInput.q)
+        if (desiredKeys.q.pressed && !pDeltaInput.q.pressed)
         {
             this->pMainLoopActive = false;
         }
-        if (desiredKeys.r && !pDeltaInput.r)
+        if (desiredKeys.r.pressed && !pDeltaInput.r.pressed)
         {
             pGameGrid->resetGame();
             pGameState = GAME_STATE::IN_GAME;
@@ -405,83 +400,83 @@ void Window::input(GAME_STATE gameState)
     //     SGL_Log("Exiting through EXC key.");
     //     this->pMainLoopActive = false;
     // }
-    if (desiredKeys.sdlInternalQuit)
+    if (desiredKeys.sdlInternalQuit.active)
     {
         SGL_Log("Exiting through internal SDL quit.");
         this->pMainLoopActive = false;
     }
-    if (desiredKeys.c)
+    if (desiredKeys.c.pressed)
     {
         this->pShakeTime = 0.010f;
     }
-    if (desiredKeys.p && !pDeltaInput.p)
+    if (desiredKeys.p.pressed && !pDeltaInput.p.pressed)
     {
         this->pDrawDebugPanel = !pDrawDebugPanel;
     }
-    if (desiredKeys.t)
+    if (desiredKeys.t.pressed)
     {
         pShakeTime += 1.0f;
     }
-    if (desiredKeys.up && !pDeltaInput.up)
+    if (desiredKeys.up.pressed && !pDeltaInput.up.pressed)
     {
 
     }
-    if (desiredKeys.down && !pDeltaInput.down)
+    if (desiredKeys.down.pressed && !pDeltaInput.down.pressed)
     {
 
     }
-    if (desiredKeys.enter && !pDeltaInput.enter)
+    if (desiredKeys.enter.pressed && !pDeltaInput.enter.pressed)
     {
 
     }
-    if (desiredKeys.left && !pDeltaInput.left)
+    if (desiredKeys.left.pressed && !pDeltaInput.left.pressed)
     {
 
     }
 
-    if (desiredKeys.right && !pDeltaInput.right)
+    if (desiredKeys.right.pressed && !pDeltaInput.right.pressed)
     {
 
     }
-    if (desiredKeys.n)
+    if (desiredKeys.n.pressed)
     {
         pWindowManager->resizeWindow(640, 360, true);
         pCurrentResolution = MENU_SETTINGS_RESOLUTION_SELECTION::RES_360P;
     }
-    if (desiredKeys.b)
+    if (desiredKeys.b.pressed)
     {
     }
-    if (desiredKeys.m)
+    if (desiredKeys.m.pressed)
     {
         pWindowManager->resizeWindow(1280, 720, true);
         pCurrentResolution = MENU_SETTINGS_RESOLUTION_SELECTION::RES_720P;
     }
-    if (desiredKeys.f)
+    if (desiredKeys.f.pressed)
     {
         pWindowManager->toggleFullScreen(true);
     }
-    if (desiredKeys.g)
+    if (desiredKeys.g.pressed)
     {
         pWindowManager->toggleFullScreen(false);
     }
-    if (desiredKeys.e && !pDeltaInput.e)
+    if (desiredKeys.e.pressed && !pDeltaInput.e.pressed)
     {
         pWindowManager->setPostProcessorShader(pWindowManager->assetManager->getShader("customPP"));
         SGL_Log("Custom PP shader.");
     }
-    if (desiredKeys.t && !pDeltaInput.t)
+    if (desiredKeys.t.pressed && !pDeltaInput.t.pressed)
     {
         pWindowManager->setPostProcessorShader(pWindowManager->assetManager->getShader("postProcessor"));
         SGL_Log("Default PP shader.");
     }
-    if (desiredKeys.y)
+    if (desiredKeys.y.pressed)
         pCameraZoom += 0.010;
-    if (desiredKeys.u)
+    if (desiredKeys.u.pressed)
         pCameraZoom -= 0.010;
 
-    if (desiredKeys.z)
+    if (desiredKeys.z.pressed)
         this->pWindowManager->toggleVSYNC(true);
-    if (desiredKeys.x)
+    if (desiredKeys.x.pressed)
         this->pWindowManager->toggleVSYNC(false);
 
     if (pCameraZoom < 0.0)
@@ -949,7 +944,7 @@ void Window::drawDebugPanel(float x, float y, float fontSize, SGL_Color color)
     std::string VSYNC = "VSYNC: ";
     VSYNC += (windowSpecs.activeVSYNC ? "YES" : "NO");
     std::string LMB = "LMB: ";
-    LMB += (pDeltaInput.mouseLeftPressed ? "PRESSED" : "-----");
+    LMB += (pDeltaInput.mouse.leftBtn.pressed ? "PRESSED" : "-----");
     textureMem << "GPU Texture Memory (MB): " << (static_cast<float>(pWindowManager->assetManager->getTextureMemoryGPU()) / 1024) / 1024;
 
     // Title
@@ -993,13 +988,13 @@ void Window::drawDebugPanel(float x, float y, float fontSize, SGL_Color color)
 
     // Right
     pWindowManager->renderer->renderText("--- MOUSE ---", right, y + (offset * 1.0f), fontSize, subTitleColor);
-    pWindowManager->renderer->renderText("X: " + std::to_string(pDeltaInput.rawMousePosX),
+    pWindowManager->renderer->renderText("X: " + std::to_string(pDeltaInput.mouse.cursorX),
                                          right,  y + (offset * 2.0f), fontSize, color);
-    pWindowManager->renderer->renderText("N: " + std::to_string(pDeltaInput.normalizedMousePosX),
+    pWindowManager->renderer->renderText("N: " + std::to_string(pDeltaInput.mouse.cursorXNormalized),
                                          right + spacing,  y + (offset * 2.0f), fontSize, color);
-    pWindowManager->renderer->renderText("Y: " + std::to_string(pDeltaInput.rawMousePosY),
+    pWindowManager->renderer->renderText("Y: " + std::to_string(pDeltaInput.mouse.cursorY),
                                          right,  y + (offset * 3.0f), fontSize, color);
-    pWindowManager->renderer->renderText("N: " + std::to_string(pDeltaInput.normalizedMousePosY),
+    pWindowManager->renderer->renderText("N: " + std::to_string(pDeltaInput.mouse.cursorYNormalized),
                                          right + spacing,  y + (offset * 3.0f), fontSize, color);
 }
 

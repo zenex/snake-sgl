@@ -1,5 +1,11 @@
+
+Author:  AlexHG @ ZEN3X.COM
+License: MIT License
+Website: https://ZEN3X.COM
+
 This file credits the libraries used in the SkeletonGL project.
 Kudos to their respective developers for their talent and hard work.
+
 
 
 ._____. ._____. .__________________________________________________________________. ._____. ._____.

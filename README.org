@@ -1,11 +1,11 @@
-#+Title: [[https://neohex.xyz/projects/?nav=snake-sgl][Snake-SGL]]
-#+Author: AlexHG @ NEOHEX.XYZ
+#+Title: [[https://zen3x.com/projects/?nav=snake-sgl][Snake-SGL]]
+#+Author: AlexHG @ ZEN3X.COM
 #+OPTIONS: \n:t
 
 * Snake-SGL: the ultimate snake clone
   Snake-SGL™ is an award winning realtime puzzle arcade singleplayer simulation game "inspired" by the legendary "snake" game made by Nokia. A re-imagining of the classic that captivated the world, the critically acclaimed spiritual successor shook the gaming community with its original theme and inventive gameplay that revolutionized the entire industry.
 
-  This program was made as an example application for the [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]] rendering engine. 
+  This program was made as an example application for the [[https://zen3x.com/projects/?nav=skeletongl][SkeletonGL]] rendering engine. 
 
 * System Requirements
   OS: Any modern UNIX system
@@ -18,7 +18,7 @@
   #+html: <p align="center"><img src="https://i.imgur.com/22SC1k2.gif" /></p>
 
 * Installation
-  1. Install the [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]] dependencies
+  1. Install the [[https://zen3x.com/projects/?nav=skeletongl][SkeletonGL]] dependencies
 
   For Debia/Ubuntu systems:
   #+BEGIN_SRC 
@@ -39,4 +39,4 @@
   #+END_SRC
 
 
-  Visit [[https://neohex.xyz/projects/?nav=skeletongl][NEOHEX.XYZ]] for more information.
+  Visit [[https://zen3x.com/projects/?nav=skeletongl][ZEN3X.COM]] for more information.

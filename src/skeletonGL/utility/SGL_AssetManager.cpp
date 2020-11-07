@@ -1,17 +1,12 @@
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-// Author:  AlexHG @ NEOHEX.XYZ
+// Author:  AlexHG @ ZEN3X.COM
 // License: MIT License
-// Website: https://neohex.xyz
+// Website: https://ZEN3X.COM
+
 /**
  * @file    src/skeletonGL/utility/SGL_AssetManager.cpp
- * @author  TSURA @ NEOHEX.XYZ
- * @date    9/4/2018
- * @version 1.0
+ * @author  AlexHG @ ZEN3X.COM
+ * @date    05/11/2020
+ * @version 1.92
  *
  * @brief Loads and manages all assets, including compiling and linking shaders
  *
@@ -266,10 +261,11 @@ SGL_Texture SGL_AssetManager::loadTextureFromFile(const GLchar *file, GLboolean 
 }
 
 /**
- * @brief Return the total memory allocated by this process
+ * @brief Return the total GPU memory allocated by SGL
  * @return int Total memory in bytes
  */
 int SGL_AssetManager::getTextureMemoryGPU() const
 {
-    return pTextureGPUMemory;
+    //return pTextureGPUMemory;
+    return static_cast<int>(pTextureGPUMemory + SGL_OGL_CONSTANTS::MAX_LINE_BATCH_INSTANCES + SGL_OGL_CONSTANTS::MAX_SPRITE_BATCH_INSTANCES + SGL_OGL_CONSTANTS::MAX_PIXEL_BATCH_INSTANCES);
 }

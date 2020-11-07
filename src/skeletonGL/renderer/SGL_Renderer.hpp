@@ -1,17 +1,12 @@
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-// Author:  AlexHG @ NEOHEX.XYZ
+// Author:  AlexHG @ ZEN3X.COM
 // License: MIT License
-// Website: https://neohex.xyz
+// Website: https://ZEN3X.COM
+
 /**
  * @file    src/skeletonGL/utility/SGL_Renderer.hpp
- * @author  TSURA @ NEOHEX.XYZ
- * @date    9/4/2018
- * @version 1.0
+ * @author  AlexHG @ ZEN3X.COM
+ * @date    05/11/2020
+ * @version 1.92
  *
  * @brief Renders to the currently bound post processor (FBO)
  *
@@ -112,6 +107,8 @@ struct SGL_Pixel
     glm::vec2 position;                          ///< Pixel position
     SGL_Color color;                             ///< Pixel color
     SGL_Shader shader;                           ///< Shader to process the pixel (because why the fuck not)
+    float size = SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE;
+    BLENDING_TYPE blending;                      ///< Blending type
 };
 
 /**
@@ -125,6 +122,8 @@ struct SGL_Line
     glm::vec2 positionA, positionB;              ///< Vertices for both ends of the line
     SGL_Color color;                             ///< Line color
     SGL_Shader shader;                           ///< Line shader
+    float width = SGL_OGL_CONSTANTS::MIN_LINE_WIDTH;
+    BLENDING_TYPE blending;                      ///< Blending type
 };
 
 
@@ -236,35 +235,23 @@ public:
     // Destructor
     ~SGL_Renderer();
 
-    // Render a line
     void renderLine(const SGL_Line &line) const;
-    // Render a line
-    void renderLine(float x1, float y1, float x2, float y2, SGL_Color color);
+    void renderLine(float x1, float y1, float x2, float y2, float width, SGL_Color color);
 
-    // Render a pixel
     void renderPixel(float x1, float y1, SGL_Color color);
-    // Render a pixel
     void renderPixel(const SGL_Pixel &pixel) const;
 
-    // Render a string
     void renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, SGL_Color color);
-    // Render a string
     void renderText(SGL_Text &text);
 
-    // Renders text as bitmap characters
     void renderBitmapText(SGL_Bitmap_Text &text) const;
-    // The bitmap font renderer requires a default texture
-    // void renderBitmapText(std::string text, GLfloat x, GLfloat y, GLfloat scale, SGL_Color color);
 
-    // Render a sprite
     void renderSprite(const SGL_Sprite &sprite) const;
 
-    // EXPERIMENTAL
-    void renderSpriteBatch(const SGL_Sprite &sprite);
-    void renderPixelBatch(const SGL_Pixel &pixel);
-    void renderLineBatch(const SGL_Line &line);
-
-    void renderSpriteBatch(const SGL_Sprite &sprite, const std::vector<glm::vec2> *vectors);
+    // BATCH / INSTANCE RENDERING
+    void renderSpriteBatch(const SGL_Sprite &sprite, const std::vector<glm::mat4> *matrices);
+    void renderLineBatch(const SGL_Line &line, const std::vector<glm::vec2> *vectors);
+    void renderPixelBatch(const SGL_Pixel &pixel, const std::vector<glm::vec2> *vectors);
 };
 
 #endif //SRC_SKELETONGL_RENDERER_RENDERER_HPP
