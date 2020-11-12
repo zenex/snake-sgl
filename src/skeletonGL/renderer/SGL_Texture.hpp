@@ -1,10 +1,10 @@
-// Author:  AlexHG @ ZEN3X.COM
+// Author:  AlexHG @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://ZEN3X.COM
+// Website: https://XENOBYTE.XYZ
 
 /**
  * @file    src/skeletonGL/utility/SGL_Texture.hpp
- * @author  AlexHG @ ZEN3X.COM
+ * @author  AlexHG @ XENOBYTE.XYZ
  * @date    05/11/2020
  * @version 1.92
  *

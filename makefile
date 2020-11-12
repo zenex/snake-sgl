@@ -1,6 +1,6 @@
-# Author:  AlexHG @ ZEN3X.COM
+# Author:  AlexHG @ XENOBYTE.XYZ
 # License: MIT License
-# Website: https://ZEN3X.COM
+# Website: https://XENOBYTE.XYZ
 
 CC=clang++
 
