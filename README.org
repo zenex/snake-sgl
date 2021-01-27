@@ -1,5 +1,5 @@
 #+Title: [[https://xenobyte.xyz/projects/?nav=snake-sgl][Snake-SGL]]
-#+Author: AlexHG @ XENOBYTE.XYZ
+#+Author: SENEX @ XENOBYTE.XYZ
 #+OPTIONS: \n:t
 
 * Snake-SGL: the ultimate snake clone
@@ -10,7 +10,7 @@
 * System Requirements
   OS: Any modern UNIX system
 
-  RAM: 256MB
+  RAM: 64MB
 
   CPU: Yes
 

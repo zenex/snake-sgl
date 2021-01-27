@@ -1,22 +1,24 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
-
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
- *  @file    src/skeletonGL/SGL_Window.hpp
- *  @author  AlexHG @ XENOBYTE.XYZ
- *  @date    05/11/2020
- *  @version 1.92
+ * @file    src/skeletonGL/window/SGL_Window.hpp
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
+ * @brief Main window manager, acts as the SGL framework's interface
+ * @section DESCRIPTION
  *
- *  @brief Main window manager, acts as the SGL framework's interface
- *
- *  @section DESCRIPTION
- *
- *  SGL_Window wraps around most of the library's functionality, it provides the programmer
- *  with the user's input, sets up the main window, controls the simulation's time, initializes and
- *  configures the rendering engine, sets up renders. etc. This is the primary access to SkeletonGL.
- *
+ * SGL_Window wraps around most of the library's functionality, it provides the programmer
+ * with the user's input, sets up the main window, controls the simulation's time, initializes and
+ * configures the rendering engine, sets up renders. etc. This is the primary access to SkeletonGL.
  */
 
 #ifndef SRC_SKELETONGL_WINDOW_SGLWINDOW_H
@@ -66,7 +68,7 @@ class SGL_Window
 {
 private:
     // SKELETONGL
-    const float pSGLVERSION = 1.1f;                           ///< Current SGL version number, remember to change it each release
+    const float pSGLVERSION = 2.1f;                           ///< Current SGL version number
     // WINDOW & OPENGL
     SDL_Window *pWindow;                                      ///< Main window pointer
     SDL_GLContext pGLContext;                                 ///< Internal OpenGL context

@@ -1,7 +1,13 @@
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
+// License: MIT License
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
-Author:  AlexHG @ XENOBYTE.XYZ
-License: MIT License
-Website: https://XENOBYTE.XYZ
 
 This file credits the libraries used in the SkeletonGL project.
 Kudos to their respective developers for their talent and hard work.

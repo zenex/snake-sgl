@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/utility/SGL_OpenGLManager.cpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Encapsulates ALL OpenGL related function calls and manages its resources
  *
@@ -1018,8 +1024,7 @@ void SGL_OpenGLManager::pixelSize(GLfloat size) const noexcept
 void SGL_OpenGLManager::resizeGL(int x, int y, int w, int h) const noexcept
 {
     glViewport(x, y, w, h);
-    // SGL_OpenGLManager::pLog->print("New window width: ", w);
-    // SGL_OpenGLManager::pLog->print("New window heigth: ", h);
+    SGL_Log("New window width: " + std::to_string(w) + " height: " + std::to_string(h));
 }
 
 /**

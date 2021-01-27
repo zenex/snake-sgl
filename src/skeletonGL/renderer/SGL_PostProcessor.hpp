@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.hpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Processes the frame's final render
  *
@@ -41,7 +47,7 @@ class SGL_PostProcessor
 {
 private:
     std::shared_ptr<SGL_OpenGLManager> WMOGLM;                                 ///< Primary OpenGL context
-    std::string pMainFBO, pSecondaryFBO, pMainVBO, pMainVAO, pTextureCoordVBO; ///< OpenGL object containers
+    // std::string pMainFBO, pSecondaryFBO, pMainVBO, pMainVAO, pTextureCoordVBO; ///< OpenGL object containers
     GLuint pRBO;                                                               ///< Render buffer object
     // NOT the same as the window's default shader, this one simply blits the
     // final FBO as it is, the default window shader provides the program's

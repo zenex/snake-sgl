@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.hpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Processes the frame's final render
  *
@@ -123,12 +129,12 @@ void SGL_Camera::cameraMode(SGL_Shader shader, CAMERA_MODE mode) noexcept
     if (mode == DEFAULT)
     {
         // Camera is active, apply the offset to the projection matrix
-        shader.use(*WMOGLM).setMatrix4(*WMOGLM, "projection", pCameraMatrix);
+        shader.use(*WMOGLM).setMatrix4(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_M4F_PROJECTION.c_str(), pCameraMatrix);
     }
     else if (mode == OVERLAY)
     {
         // Camera is disabled, apply the original overlay  matrix
-        shader.use(*WMOGLM).setMatrix4(*WMOGLM, "projection", pOverlayMatrix);
+        shader.use(*WMOGLM).setMatrix4(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_M4F_PROJECTION.c_str(), pOverlayMatrix);
     }
 
 }

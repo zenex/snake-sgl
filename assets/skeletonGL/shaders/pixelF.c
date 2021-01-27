@@ -10,6 +10,7 @@ uniform vec2 windowDimensions;
 
 void main()
 {
-    colorOUT = color;
-    /* colorOUT = vec4(abs(sin(timeElapsed)),0.0,0.0,1.0); */
+  //TexCoords.y = 1.0f - TexCoords.y;
+  colorOUT = color;
+  /* colorOUT = vec4(abs(sin(timeElapsed)),0.0,0.0,1.0); */
 }

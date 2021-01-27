@@ -1,19 +1,24 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    skeletonGL.hpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
- *
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.0
  * @brief Monolithic include file for lazy people
  * @section DESCRIPTION
  *
  * Includes all the SkeletonGL files in a single header file, the library is pretty small
  * so you might as well.
- */
+*/
 
 
 #ifndef SRC_SKELETONGL_SKELETONGL_H

@@ -1,6 +1,12 @@
-// Author:  AlexHG @ ZEN3X.COM
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://ZEN3X.COM
+// Website: https://xenobyte.xyz/projects/?nav=snake-sgl
 
 
 #include "window.hpp"
@@ -23,8 +29,7 @@ int Window::createSGLWindow()
     SGL_Log("Creating window...");
     try
     {
-        //this->pWindowManager->initializeWindow(0, 0, 1024, 576, 480, 270, std::string("With_his_jimmy "), false, std::string("skeletongl.ini"));
-        this->pWindowManager->initializeWindow(0, 0, 1280, 720, 640, 352, std::string("RISK VECTOR"), false, std::string("skeletongl.ini"));
+        this->pWindowManager->initializeWindow(0, 0, 1280, 720, 640, 352, std::string("SNAKE-SGL"), false, std::string("skeletongl.ini"));
     }
     catch (SGL_Exception &e)
     {
@@ -93,11 +98,11 @@ void Window::mainLoop()
 
     // Load UI
     pUISprite = std::make_shared<SGL_Sprite>();
-    pUISprite->shader = pWindowManager->assetManager->getShader("customSprite");
+    pUISprite->shader = pWindowManager->assetManager->getShader(SGL::DEFAULT_SPRITE_SHADER);
     pUISprite->position = glm::vec2(150, 32);
     pUISprite->size = glm::vec2(304, 126);
     pUISprite->color = SGL_Color(1.0f, 1.0f, 1.0f, 1.0f);
-    pUISprite->texture = pWindowManager->assetManager->getTexture("risk_vector");
+    pUISprite->texture = pWindowManager->assetManager->getTexture("snake_ui");
     pUISprite->changeUVCoords(336, 0, 304, 116);
 
     // Intro sequence BG
@@ -107,28 +112,27 @@ void Window::mainLoop()
     pIntroSequenceBG->size = glm::vec2(windowSpecs.internalW, (windowSpecs.internalH));
     pIntroSequenceBG->color = SGL_Color(1.0f, 1.0f, 1.0f, 1.0f);
     pIntroSequenceBG->blending = BLENDING_TYPE::DEFAULT_RENDERING;
-    pIntroSequenceBG->shader = pWindowManager->assetManager->getShader("spriteUV");
+    pIntroSequenceBG->shader = pWindowManager->assetManager->getShader(SGL::DEFAULT_SPRITE_SHADER);
     pIntroSequenceBG->resetUVCoords();
 
     // Debug panel background image
     pDebugPanelBackground = std::make_shared<SGL_Sprite>();
     pDebugPanelBackground->position = glm::vec2(0, 0);
-    pDebugPanelBackground->texture = pWindowManager->assetManager->getTexture("box");
+    pDebugPanelBackground->texture = pWindowManager->assetManager->getTexture(SGL::SQUARE_TEXTURE);
     pDebugPanelBackground->size = glm::vec2(windowSpecs.internalW, (windowSpecs.internalH));
     pDebugPanelBackground->color = SGL_Color(0.0f, 0.0f, 0.0f, 0.70f);
     pDebugPanelBackground->blending = BLENDING_TYPE::DEFAULT_RENDERING;
-    pDebugPanelBackground->shader = pWindowManager->assetManager->getShader("spriteUV");
+    pDebugPanelBackground->shader = pWindowManager->assetManager->getShader(SGL::DEFAULT_SPRITE_SHADER);
     pDebugPanelBackground->resetUVCoords();
 
     uint8_t tileSize = 16;
-    pGameGrid = std::make_shared<Grid>(0, 0, (pWindowManager->getWindowCreationSpecs().internalW / tileSize), (pWindowManager->getWindowCreationSpecs().internalH / tileSize), tileSize, SGL_Color(1.0, 1.0, 1.0, 1.0), pWindowManager->assetManager->getTexture("risk_vector"));
+    pGameGrid = std::make_shared<Grid>(0, 0, (pWindowManager->getWindowCreationSpecs().internalW / tileSize), (pWindowManager->getWindowCreationSpecs().internalH / tileSize), tileSize, SGL_Color(1.0, 1.0, 1.0, 1.0), pWindowManager->assetManager->getTexture("snake_ui"));
 
 
     //random number generator (thanks C++11)
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> dis(0.0, 1.0);
-
 
     // FIXED TIME STEP
     pFixedTimeStepMS = 1.0f / 60.0f;
@@ -466,7 +470,7 @@ void Window::input(GAME_STATE gameState)
     }
     if (desiredKeys.t.pressed && !pDeltaInput.t.pressed)
     {
-        pWindowManager->setPostProcessorShader(pWindowManager->assetManager->getShader("postProcessor"));
+        pWindowManager->setPostProcessorShader(pWindowManager->assetManager->getShader(SGL::DEFAULT_FRAMEBUFFER_SHADER));
         SGL_Log("Default PP shader.");
     }
     if (desiredKeys.y.pressed)
@@ -541,7 +545,7 @@ void Window::render(GAME_STATE gameState)
         SGL_Bitmap_Text text;
         text.position.x = 0;
         text.position.y = 0;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "FPS: " + std::to_string(pFPS);
         text.color = SGL_Color{0.8f, 0.2f, 0.2f, 1.0f};
         text.scale = 10;
@@ -563,7 +567,7 @@ void Window::renderGameIntro()
     // PRESS ENTER fade in/outer
     pBMPText.position.x = 150;
     pBMPText.position.y = 220;
-    pBMPText.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+    pBMPText.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
     pBMPText.text = "PRESS ENTER";
     pBMPText.color = SGL_Color{1.0f, 1.8f, 1.0f, pSplashScreenAlpha};
     pBMPText.scale = 30;
@@ -578,7 +582,7 @@ void Window::renderGameOver()
         darkenBG.position.y = 0;
         darkenBG.size.x = pWindowManager->getWindowCreationSpecs().internalW;
         darkenBG.size.y = pWindowManager->getWindowCreationSpecs().internalH;
-        darkenBG.texture = pWindowManager->assetManager->getTexture("box");
+        darkenBG.texture = pWindowManager->assetManager->getTexture(SGL::SQUARE_TEXTURE);
         darkenBG.color = SGL_Color{0.0f, 0.0f, 0.0f, 0.40f};
         darkenBG.resetUVCoords();
         this->pWindowManager->renderer->renderSprite(darkenBG);
@@ -588,7 +592,7 @@ void Window::renderGameOver()
         text.scale = 22;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (text.scale * 4);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) - 40;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "GAME OVER";
         text.color = SGL_Color{1.0f, 1.0f, 01.0f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -596,7 +600,7 @@ void Window::renderGameOver()
         text.scale = 8 ;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (10 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) - 20;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "SCORE: " + std::to_string(pGameGrid->getScore());
         text.color = SGL_Color{0.2f, 0.9f, 0.9f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -605,14 +609,14 @@ void Window::renderGameOver()
         text.scale = 14;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 10;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "[M]";
         text.color = SGL_Color{0.70f, 0.20f, 0.30f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
         text.scale = 14;
         text.position.x += (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 10;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "ENU";
         text.color = SGL_Color{1.0f, 1.0f, 1.0f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -620,14 +624,14 @@ void Window::renderGameOver()
         text.scale = 14;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 30;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "[Q]";
         text.color = SGL_Color{0.70f, 0.20f, 0.30f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
         text.scale = 14;
         text.position.x += (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 30;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "UIT";
         text.color = SGL_Color{1.0f, 1.0f, 1.0f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -635,14 +639,14 @@ void Window::renderGameOver()
         text.scale = 14;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 50;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "[R]";
         text.color = SGL_Color{0.70f, 0.20f, 0.30f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
         text.scale = 14;
         text.position.x += (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 50;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "ESTART";
         text.color = SGL_Color{1.0f, 1.0f, 01.0f, 1.0f};
 
@@ -667,7 +671,7 @@ void Window::renderGame(bool paused)
         darkenBG.position.y = 0;
         darkenBG.size.x = pWindowManager->getWindowCreationSpecs().internalW;
         darkenBG.size.y = pWindowManager->getWindowCreationSpecs().internalH;
-        darkenBG.texture = pWindowManager->assetManager->getTexture("box");
+        darkenBG.texture = pWindowManager->assetManager->getTexture(SGL::SQUARE_TEXTURE);
         darkenBG.color = SGL_Color{0.0f, 0.0f, 0.0f, 0.40f};
         darkenBG.resetUVCoords();
         this->pWindowManager->renderer->renderSprite(darkenBG);
@@ -677,7 +681,7 @@ void Window::renderGame(bool paused)
         text.scale = 22;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (6 * 11);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) - 40;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "PAUSED";
         text.color = SGL_Color{1.0f, 1.0f, 01.0f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -685,7 +689,7 @@ void Window::renderGame(bool paused)
         text.scale = 8 ;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (11 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) - 20;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "PRESS [ESC] TO RETURN";
         text.color = SGL_Color{0.2f, 0.9f, 0.9f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -694,14 +698,14 @@ void Window::renderGame(bool paused)
         text.scale = 14;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 10;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "[M]";
         text.color = SGL_Color{0.70f, 0.20f, 0.30f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
         text.scale = 14;
         text.position.x += (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 10;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "ENU";
         text.color = SGL_Color{1.0f, 1.0f, 01.0f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -709,14 +713,14 @@ void Window::renderGame(bool paused)
         text.scale = 14;
         text.position.x = (pWindowManager->getWindowCreationSpecs().internalW / 2) - (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 30;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "[Q]";
         text.color = SGL_Color{0.70f, 0.20f, 0.30f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
         text.scale = 14;
         text.position.x += (3 * text.scale);
         text.position.y = (pWindowManager->getWindowCreationSpecs().internalH / 2) + 30;
-        text.texture = pWindowManager->assetManager->getTexture("defaultBitmapFont");
+        text.texture = pWindowManager->assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE);
         text.text = "UIT";
         text.color = SGL_Color{1.0f, 1.0f, 01.0f, 1.0f};
         this->pWindowManager->renderer->renderBitmapText(text);
@@ -733,12 +737,12 @@ void Window::renderGame(bool paused)
 void Window::renderMainMenu()
 {
     // Title
-    pUISprite->shader = pWindowManager->assetManager->getShader("customSprite");
+    pUISprite->shader = pWindowManager->assetManager->getShader(SGL::DEFAULT_SPRITE_SHADER);
     // pUISprite->position = glm::vec2(150, 32);
     pUISprite->size = glm::vec2(304, 126);
     pUISprite->position = glm::vec2((pWindowManager->getWindowCreationSpecs().internalW / 2 ) - (pUISprite->size.x / 2), 32);
     pUISprite->color = SGL_Color(1.0f, 1.0f, 1.0f, 1.0f);
-    pUISprite->texture = pWindowManager->assetManager->getTexture("risk_vector");
+    pUISprite->texture = pWindowManager->assetManager->getTexture("snake_ui");
     pUISprite->changeUVCoords(336, 0, 304, 116);
     this->pWindowManager->renderer->renderSprite((*pUISprite));
 
@@ -785,12 +789,12 @@ void Window::renderMainMenu()
 void Window::renderOptionsMenu()
 {
     // Title
-    pUISprite->shader = pWindowManager->assetManager->getShader("customSprite");
+    pUISprite->shader = pWindowManager->assetManager->getShader(SGL::DEFAULT_SPRITE_SHADER);
     // pUISprite->position = glm::vec2(150, 32);
     pUISprite->size = glm::vec2(304, 126);
     pUISprite->position = glm::vec2((pWindowManager->getWindowCreationSpecs().internalW / 2 ) - (pUISprite->size.x / 2), 32);
     pUISprite->color = SGL_Color(1.0f, 1.0f, 1.0f, 1.0f);
-    pUISprite->texture = pWindowManager->assetManager->getTexture("risk_vector");
+    pUISprite->texture = pWindowManager->assetManager->getTexture("snake_ui");
     pUISprite->changeUVCoords(336, 0, 304, 116);
     this->pWindowManager->renderer->renderSprite((*pUISprite));
 
@@ -1135,7 +1139,7 @@ void Window::loadAssets()
     pWindowManager->checkForErrors();
     SGL_Log("Loading 2D textures.");
 
-    pWindowManager->assetManager->loadTexture("assets/textures/snake_ui.png", true, "UI");
+    pWindowManager->assetManager->loadTexture("assets/textures/snake_ui.png", true, "snake_ui");
     pWindowManager->assetManager->loadTexture("assets/textures/risk_vector.png", true, "risk_vector");
     pWindowManager->assetManager->loadTexture("assets/textures/bg_space2.png", true, "bg_space");
     pWindowManager->assetManager->loadTexture("assets/textures/splash_screen.jpg", false, "splashScreen");

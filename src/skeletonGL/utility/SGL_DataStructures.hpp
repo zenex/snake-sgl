@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
- * @file    src/skeletonGL/utility/SGL_DataStructures.cpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @file    src/skeletonGL/utility/SGL_DataStructures.hpp
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Contains most of the data structures used by SkeletonGL
  *
@@ -43,8 +49,22 @@ namespace SGL
     const float PI = 3.14159265;
     const float PIx2 = 6.2831853;
     const float E = 2.7182818284;
-    // Default texture name, used by both the AssetManager and the SGL_Renderer
-    const std::string DEFAULT_TEXTURE_NAME = "default_texture";
+    // Default texture name, used by both the AssetManager and the SGL_Renderer to ID internal resources
+    const std::string DEFAULT_TEXTURE             = "default_texture";
+    const std::string INVISIBLE_TEXTURE           = "invisible_texture"; // Use for the circle renderer
+    const std::string SQUARE_TEXTURE              = "blank_square"; // White square, yeah
+    const std::string DEFAULT_BMP_FONT_TEXTURE    = "default_bmp_font_texture"; // Used by the SGL_Renderer to render bitmap fonts
+
+    const std::string DEFAULT_SPRITE_SHADER       = "default_sprite_shader";
+    const std::string DEFAULT_SPRITE_BATCH_SHADER = "default_sprite_batch_shader";
+    const std::string DEFAULT_PIXEL_SHADER        = "default_pixel_shader";
+    const std::string DEFAULT_PIXEL_BATCH_SHADER  = "default_pixel_batch_shader";
+    const std::string DEFAULT_TEXT_SHADER         = "default_text_shader";
+    const std::string DEFAULT_LINE_SHADER         = "default_line_shader";
+    const std::string DEFAULT_LINE_BATCH_SHADER   = "default_line_batch_shader";
+    const std::string DEFAULT_FRAMEBUFFER_SHADER  = "default_framebuffer_shader";
+    const std::string DEFAULT_CIRCLE_SHADER       = "default_circle_shader";
+    const std::string DEFAULT_CIRCLE_BATCH_SHADER = "default_circle_batch_shader";
 }
 
 /**
@@ -60,11 +80,56 @@ namespace SGL_OGL_CONSTANTS
     const float MAX_PIXEL_SIZE = 20.0f;
     const float MIN_PIXEL_SIZE = 1.0f;
 
+    const float MAX_CIRCLE_WIDTH = 1.0f;
+    const float MIN_CIRCLE_WIDTH = 0.01f;
+
     // These rendering consatants are the maximum amount of simultaneous instances to be rendered in a batch
     // and MUST NOT BE EXCEEDED
     const std::uint32_t MAX_SPRITE_BATCH_INSTANCES = 10000;
     const std::uint32_t MAX_PIXEL_BATCH_INSTANCES = 10000;
     const std::uint32_t MAX_LINE_BATCH_INSTANCES = 10000;
+
+    // Names assigned to the OpenGL objects used by the SGL_Renderer
+    const std::string SGL_RENDERER_PIXEL_VAO                  = "SGL_Renderer_pixel_VAO";
+    const std::string SGL_RENDERER_PIXEL_VBO                  = "SGL_Renderer_pixel_VBO";
+    const std::string SGL_RENDERER_PIXEL_BATCH_INSTANCES_VBO  = "SGL_Renderer_pixel_batch_instances_VBO";
+    const std::string SGL_RENDERER_PIXEL_BATCH_VAO            = "SGL_Renderer_pixel_batch_VAO";
+    const std::string SGL_RENDERER_PIXEL_BATCH_VBO            = "SGL_Renderer_pixel_batch_VBO";
+    const std::string SGL_RENDERER_LINE_VAO                   = "SGL_Renderer_line_VAO";
+    const std::string SGL_RENDERER_LINE_VBO                   = "SGL_Renderer_line_VBO";
+    const std::string SGL_RENDERER_LINE_BATCH_INSTANCES_VBO   = "SGL_Renderer_line_batch_instances_VBO";
+    const std::string SGL_RENDERER_LINE_BATCH_VAO             = "SGL_Renderer_line_batch_VAO";
+    const std::string SGL_RENDERER_LINE_BATCH_VBO             = "SGL_Renderer_line_batch_VBO";
+    const std::string SGL_RENDERER_SPRITE_VAO                 = "SGL_Renderer_sprite_VAO";
+    const std::string SGL_RENDERER_SPRITE_VBO                 = "SGL_Renderer_sprite_VBO";
+    const std::string SGL_RENDERER_SPRITE_BATCH_INSTANCES_VBO = "SGL_Renderer_sprite_batch_instances_VBO";
+    const std::string SGL_RENDERER_SPRITE_BATCH_VAO           = "SGL_Renderer_sprite_batch_VAO";
+    const std::string SGL_RENDERER_SPRITE_BATCH_VBO           = "SGL_Renderer_sprite_batch_VBO";
+    const std::string SGL_RENDERER_TEXT_VAO                   = "SGL_Renderer_text_VAO";
+    const std::string SGL_RENDERER_TEXT_VBO                   = "SGL_Renderer_text_VBO";
+    const std::string SGL_RENDERER_TEXTURE_UV_VBO             = "SGL_Renderer_texture_uv_VBO";
+
+    // POST PROCESSOR EXCLUSIVE
+    const std::string SGL_POSTPROCESSOR_PRIMARY_FBO    = "SGL_PostProcessor_primary_FBO";
+    const std::string SGL_POSTPROCESSOR_SECONDARY_FBO  = "SGL_PostProcessor_secondary_FBO";
+    const std::string SGL_POSTPROCESSOR_TEXTURE_UV_VBO = "SGL_PostProcessor_UV_VBO";
+    const std::string SGL_POSTPROCESSOR_VAO            = "SGL_PostProcessor_VAO";
+    const std::string SGL_POSTPROCESSOR_VBO            = "SGL_PostProcessor_VBO";
+
+    // Default shader uniform names, make sure they match your custom shaders.
+    const std::string SHADER_UNIFORM_V4F_COLOR                  = "color";
+    const std::string SHADER_UNIFORM_F_DELTA_TIME               = "deltaTime";
+    const std::string SHADER_UNIFORM_F_TIME_ELAPSED             = "timeElapsed";
+    const std::string SHADER_UNIFORM_V2F_WINDOW_DIMENSIONS      = "windowDimensions";
+    const std::string SHADER_UNIFORM_M4F_MODEL                  = "model";
+    const std::string SHADER_UNIFORM_M4F_PROJECTION             = "projection";
+    const std::string SHADER_UNIFORM_F_CIRCLE_BORDER_WIDTH      = "circleBorder";
+
+    // POST PROCESSOR EXCLUSIVE
+    const std::string SHADER_UNIFORM_I_SCENE                    = "scene";
+    const std::string SHADER_UNIFORM_V2F_FBO_TEXTURE_DIMENSIONS = "fboTextureDimensions";
+    const std::string SHADER_UNIFORM_V2F_MOUSE_POSITION         = "mousePosition";
+
 };
 
 
@@ -74,16 +139,42 @@ namespace SGL_OGL_CONSTANTS
  */
 namespace FOLDER_STRUCTURE
 {
-    const std::string rootDir = "./";
-    const std::string assetsDir = "/assets/skeletonGL/";
+    const std::string ROOT_DIR   = "./";
+    const std::string ASSETS_DIR = "/assets/skeletonGL/";
 
-    const std::string audioDir = rootDir + assetsDir + "audio/";
-    const std::string shadersDir = rootDir + assetsDir + "shaders/";
-    const std::string imagesDir = rootDir + assetsDir + "textures/";
-    const std::string fontsDir = rootDir + assetsDir + "fonts/";
-    const std::string defaultFont = fontsDir + "defaultFont.ttf";
-    const std::string defaultTexture = imagesDir + "defaultTexture.png";
-    const std::string defaultDebugLog = rootDir + ".debugLog.txt";
+    const std::string SHADERS_DIR  = ROOT_DIR + ASSETS_DIR + "shaders/";
+    const std::string TEXTURES_DIR = ROOT_DIR + ASSETS_DIR + "textures/";
+    const std::string FONTS_DIR    = ROOT_DIR + ASSETS_DIR + "fonts/";
+
+    const std::string DEFAULT_DEBUG_LOG_FILE         = ROOT_DIR + ".debugLog.txt";
+    const std::string DEFAULT_TTF_FONT_FILE          = FONTS_DIR + "defaultFont.ttf";
+    const std::string DEFAULT_TEXTURE_FILE           = TEXTURES_DIR + "defaultTexture.png";
+    const std::string DEFAULT_SQUARE_TEXTURE_FILE    = TEXTURES_DIR + "blank_square.png";
+    const std::string DEFAULT_BMP_FONT_TEXTURE_FILE  = TEXTURES_DIR + "default_bitmap_font.png";
+    const std::string DEFAULT_INVISIBLE_TEXTURE_FILE = TEXTURES_DIR + "invisible_texture.png";
+
+    // Default shader locations
+    const std::string SPRITE_SHADER_V_FILE       = FOLDER_STRUCTURE::SHADERS_DIR + "spriteV.c";
+    const std::string SPRITE_SHADER_F_FILE       = FOLDER_STRUCTURE::SHADERS_DIR + "spriteF.c";
+    const std::string SPRITE_BATCH_SHADER_V_FILE = FOLDER_STRUCTURE::SHADERS_DIR + "spriteBatchV.c";
+    const std::string SPRITE_BATCH_SHADER_F_FILE = FOLDER_STRUCTURE::SHADERS_DIR + "spriteBatchF.c";
+    const std::string PIXEL_SHADER_V_FILE        = FOLDER_STRUCTURE::SHADERS_DIR + "pixelV.c";
+    const std::string PIXEL_SHADER_F_FILE        = FOLDER_STRUCTURE::SHADERS_DIR + "pixelF.c";
+    const std::string PIXEL_BATCH_SHADER_V_FILE  = FOLDER_STRUCTURE::SHADERS_DIR + "pixelBatchV.c";
+    const std::string PIXEL_BATCH_SHADER_F_FILE  = FOLDER_STRUCTURE::SHADERS_DIR + "pixelBatchF.c";
+    const std::string LINE_SHADER_V_FILE         = FOLDER_STRUCTURE::SHADERS_DIR + "lineV.c";
+    const std::string LINE_SHADER_F_FILE         = FOLDER_STRUCTURE::SHADERS_DIR + "lineF.c";
+    const std::string LINE_BATCH_SHADER_V_FILE   = FOLDER_STRUCTURE::SHADERS_DIR + "lineBatchV.c";
+    const std::string LINE_BATCH_SHADER_F_FILE   = FOLDER_STRUCTURE::SHADERS_DIR + "lineBatchF.c";
+    const std::string CIRCLE_SHADER_V_FILE       = FOLDER_STRUCTURE::SHADERS_DIR + "circleV.c";
+    const std::string CIRCLE_SHADER_F_FILE       = FOLDER_STRUCTURE::SHADERS_DIR + "circleF.c";
+    const std::string CIRCLE_BATCH_SHADER_V_FILE = FOLDER_STRUCTURE::SHADERS_DIR + "circleBatchV.c";
+    const std::string CIRCLE_BATCH_SHADER_F_FILE = FOLDER_STRUCTURE::SHADERS_DIR + "circleBatchF.c";
+    const std::string TEXT_SHADER_V_FILE         = FOLDER_STRUCTURE::SHADERS_DIR + "textV.c";
+    const std::string TEXT_SHADER_F_FILE         = FOLDER_STRUCTURE::SHADERS_DIR + "textF.c";
+    const std::string FRAMEBUFFER_SHADER_V_FILE  = FOLDER_STRUCTURE::SHADERS_DIR + "frameBufferV.c";
+    const std::string FRAMEBUFFER_SHADER_F_FILE  = FOLDER_STRUCTURE::SHADERS_DIR + "frameBufferF.c";
+
 }
 
 /**

@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/utility/SGL_Shader.hpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Wraps around all necessary shader functionality
  *
@@ -33,19 +39,22 @@
 /**
  * @brief What the shader will be used to render
  */
-enum class SHADER_TYPE : std::int8_t { NO_SHADER = 0, SPRITE = 1, TEXT = 2, PIXEL = 3, LINE = 4, QUAD = 5, POST_PROCESSOR = 6, END_ENUM = 7};
+enum class SHADER_TYPE : std::int8_t { NO_SHADER = 0, SPRITE = 1, SPRITE_BATCH = 2, TEXT = 3, PIXEL = 5,
+    PIXEL_BATCH = 6, LINE = 7, LINE_BATCH = 8, QUAD = 9, POST_PROCESSOR = 10, END_ENUM = 11};
 
 
 /**
- * @brief Extra rendering values to be processed by the shader
+ * @brief Extra rendering values to be processed by the shader, note that they must be manually updated!
  */
 struct RenderDetails
 {
-    float deltaTime;                 ///< Time between frames
+    float deltaTime, timeElapsed;    ///< Time between frames
     float canvasWidth, canvasHeight; ///< Actual drawing proportions
     float mousePosX, mousePosY;      ///< Mouse positioning
+    float circleBorder;              ///< Circles thickness (for the circle renderer)
 
-    RenderDetails() : deltaTime(0.0f), canvasHeight(0.0f), canvasWidth(0.0f), mousePosX(0), mousePosY(0) {}
+    RenderDetails() : deltaTime(0.0f), canvasHeight(0.0f), canvasWidth(0.0f), mousePosX(0), mousePosY(0),
+                      circleBorder(1.0f), timeElapsed(0.0f){}
 };
 
 /**

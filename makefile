@@ -1,6 +1,12 @@
-# Author:  AlexHG @ XENOBYTE.XYZ
+# ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+# ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+# ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+# ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+# ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+# ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+# Author:  SENEX @ XENOBYTE.XYZ
 # License: MIT License
-# Website: https://XENOBYTE.XYZ
+# Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 CC=clang++
 

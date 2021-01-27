@@ -1,13 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
-
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.cpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Processes the frame's final render
  *
@@ -36,10 +41,10 @@ SGL_PostProcessor::~SGL_PostProcessor()
  */
 void SGL_PostProcessor::deleteBuffers()
 {
-    WMOGLM->deleteVAO(pMainVAO);
-    WMOGLM->deleteFBO(pMainFBO);
-    WMOGLM->deleteFBO(pSecondaryFBO);
-    WMOGLM->deleteVBO(pMainVBO);
+    WMOGLM->deleteVAO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VAO);
+    WMOGLM->deleteFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_PRIMARY_FBO);
+    WMOGLM->deleteFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_SECONDARY_FBO);
+    WMOGLM->deleteVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VBO);
 }
 
 /**
@@ -58,11 +63,6 @@ SGL_PostProcessor::SGL_PostProcessor(std::shared_ptr<SGL_OpenGLManager> oglm, co
         throw SGL_Exception("SGL_PostProcessor::SGL_PostProcessor | Default shader isn't of type POST_PROCESSOR");
 
     this->WMOGLM = oglm;
-    this->pMainFBO = "_Primary_SGL_PostProcessor_FBO";
-    this->pTextureCoordVBO = "_Primary_SGL_PostProcessor_UV_VBO";
-    this->pSecondaryFBO = "_Secondary_SGL_PostProcessor_FBO";
-    this->pMainVAO = "_Primary_SGL_PostProcessor_VAO";
-    this->pMainVBO = "_Primary_SGL_PostProcessor_VBO";
 }
 
 
@@ -91,14 +91,14 @@ void SGL_PostProcessor::reload(GLuint newWidth, GLuint newHeight)
     pWidth = newWidth;
     // Init frame buffer and render buffer objects
     WMOGLM->checkForGLErrors();
-    WMOGLM->createFBO(pMainFBO);
-    WMOGLM->createFBO(pSecondaryFBO);
+    WMOGLM->createFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_PRIMARY_FBO);
+    WMOGLM->createFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_SECONDARY_FBO);
 
     glDeleteRenderbuffers(1, &this->pRBO);
     glGenRenderbuffers(1, &this->pRBO);
 
     // Initialize renderbuffer storage with a multisampled color buffer (don't need a depth/stencil buffer)
-    WMOGLM->bindFBO(this->pMainFBO);
+    WMOGLM->bindFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_PRIMARY_FBO);
 
     glBindRenderbuffer(GL_RENDERBUFFER, this->pRBO);
     // Allocate storage for render buffer object
@@ -118,7 +118,7 @@ void SGL_PostProcessor::reload(GLuint newWidth, GLuint newHeight)
     }
 
     // Initialize the FBO/texture to blit MS color buffer to; used for shader operations
-    WMOGLM->bindFBO(this->pSecondaryFBO);
+    WMOGLM->bindFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_SECONDARY_FBO);
     this->pTexture.generate(*WMOGLM, pWidth, pHeight, NULL);
     // Atach the texture to th FBO
     WMOGLM->frameBufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->pTexture.ID, 0);
@@ -132,7 +132,7 @@ void SGL_PostProcessor::reload(GLuint newWidth, GLuint newHeight)
 
     // Load buffers and init data
     this->loadBuffers();
-    this->pShader.setInteger(*WMOGLM, "scene", 0, GL_TRUE);
+    this->pShader.setInteger(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_I_SCENE.c_str(), 0, GL_TRUE);
 
     // GLfloat offset = 1.0f / 300.0f;
     // GLfloat offsets[9][2] = {
@@ -169,7 +169,7 @@ void SGL_PostProcessor::reload(GLuint newWidth, GLuint newHeight)
  */
 void SGL_PostProcessor::beginRender() noexcept
 {
-    WMOGLM->bindFBO(this->pMainFBO);
+    WMOGLM->bindFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_PRIMARY_FBO);
     //SGL_Color color{1.0f, 1.0f, 1.0f, 1.0f};
     WMOGLM->setClearColor(pClearColor);
     WMOGLM->clearColorBuffer();
@@ -185,8 +185,8 @@ void SGL_PostProcessor::beginRender() noexcept
 void SGL_PostProcessor::endRender() noexcept
 {
     // Resolve multisampled color-buffer into intermediate FBO to store to texture
-    WMOGLM->bindFBO(this->pMainFBO, GLCONSTANTS::R);
-    WMOGLM->bindFBO(this->pSecondaryFBO, GLCONSTANTS::W);
+    WMOGLM->bindFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_PRIMARY_FBO, GLCONSTANTS::R);
+    WMOGLM->bindFBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_SECONDARY_FBO, GLCONSTANTS::W);
     WMOGLM->blitFrameBuffer(0, 0, this->pWidth, this->pHeight, 0, 0, this->pWidth, this->pHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     WMOGLM->unbindFBO();
 }
@@ -217,8 +217,8 @@ void SGL_PostProcessor::render(const SGL_Shader &shader, UV_Wrapper *UVdata)
             UVdata->UV_topRight.x / pWidth, UVdata->UV_topRight.y / pHeight,
             UVdata->UV_botRight.x / pWidth, UVdata->UV_botRight.y / pHeight
         };
-        WMOGLM->bindVAO(this->pMainVAO);
-        WMOGLM->bindVBO(this->pTextureCoordVBO);
+        WMOGLM->bindVAO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VAO);
+        WMOGLM->bindVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_TEXTURE_UV_VBO);
         WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(UV), &UV[0]);
     }
     else
@@ -232,23 +232,24 @@ void SGL_PostProcessor::render(const SGL_Shader &shader, UV_Wrapper *UVdata)
             1.0f, 0.0f, //top right
             1.0f, 1.0f //bot right
         };
-        WMOGLM->bindVAO(this->pMainVAO);
-        WMOGLM->bindVBO(this->pTextureCoordVBO);
+        WMOGLM->bindVAO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VAO);
+        WMOGLM->bindVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_TEXTURE_UV_VBO);
         WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(UV), &UV[0]);
     }
 
     WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
     activeShader.use(*WMOGLM);
-    activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
-    activeShader.setVector2f(*WMOGLM, "textureDimensions", pWidth, pHeight);
-    activeShader.setVector2f(*WMOGLM, "mousePosition", activeShader.renderDetails.mousePosX, activeShader.renderDetails.mousePosY);
+    activeShader.setFloat(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_F_DELTA_TIME.c_str(), activeShader.renderDetails.deltaTime);
+    activeShader.setFloat(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_F_TIME_ELAPSED.c_str(), activeShader.renderDetails.timeElapsed);
+    activeShader.setVector2f(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_V2F_FBO_TEXTURE_DIMENSIONS.c_str(), pWidth, pHeight);
+    activeShader.setVector2f(*WMOGLM, SGL_OGL_CONSTANTS::SHADER_UNIFORM_V2F_MOUSE_POSITION.c_str(), activeShader.renderDetails.mousePosX, activeShader.renderDetails.mousePosY);
     // activeShader.setInteger(*WMOGLM, "confuse", this->confuse);
     // activeShader.setInteger(*WMOGLM, "chaos", this->chaos);
     // activeShader.setInteger(*WMOGLM, "shake", this->shake);
     // Render textured quad
     WMOGLM->activeTexture(GL_TEXTURE0);
     this->pTexture.bind(*WMOGLM);
-    WMOGLM->bindVAO(this->pMainVAO);
+    WMOGLM->bindVAO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VAO);
     WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
     WMOGLM->unbindVAO();
     activeShader.unbind(*WMOGLM);
@@ -262,9 +263,9 @@ void SGL_PostProcessor::render(const SGL_Shader &shader, UV_Wrapper *UVdata)
  */
 void SGL_PostProcessor::loadBuffers()
 {
-    WMOGLM->createVAO(this->pMainVAO);
-    WMOGLM->createVBO(this->pMainVBO);
-    WMOGLM->createVBO(this->pTextureCoordVBO);
+    WMOGLM->createVAO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VAO);
+    WMOGLM->createVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VBO);
+    WMOGLM->createVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_TEXTURE_UV_VBO);
 
 
     GLfloat vertices[] = {
@@ -289,21 +290,21 @@ void SGL_PostProcessor::loadBuffers()
         1.0f, 1.0f //bot right
     };
 
-    WMOGLM->bindVAO(this->pMainVAO);
+    WMOGLM->bindVAO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VAO);
     this->pShader.use(*WMOGLM);
     // UV coords buffer
-    WMOGLM->bindVBO(this->pTextureCoordVBO);
+    WMOGLM->bindVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_TEXTURE_UV_VBO);
     WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(UVCoords), UVCoords, GL_STATIC_DRAW);
     // Vertex buffer
-    WMOGLM->bindVBO(this->pMainVBO);
+    WMOGLM->bindVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VBO);
     WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     // Link it to the shader
     // VBO
-    WMOGLM->bindVBO(this->pMainVBO);
+    WMOGLM->bindVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_VBO);
     WMOGLM->enableVertexAttribArray(0);
     WMOGLM->vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GL_FLOAT), (GLvoid*)0);
     // UVCoords
-    WMOGLM->bindVBO(this->pTextureCoordVBO);
+    WMOGLM->bindVBO(SGL_OGL_CONSTANTS::SGL_POSTPROCESSOR_TEXTURE_UV_VBO);
     WMOGLM->enableVertexAttribArray(1);
     WMOGLM->vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
 

@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/utility/SGL_AssetManager.cpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Loads and manages all assets, including compiling and linking shaders
  *
@@ -124,7 +130,7 @@ SGL_Texture SGL_AssetManager::loadTexture(const GLchar *file, GLboolean alpha, s
 SGL_Texture SGL_AssetManager::getTexture(std::string name) const
 {
     if (textures.count(name) <= 0)
-        return textures.at(SGL::DEFAULT_TEXTURE_NAME);
+        return textures.at(SGL::DEFAULT_TEXTURE);
     else
         return textures.at(name);
 }
@@ -237,7 +243,7 @@ SGL_Texture SGL_AssetManager::loadTextureFromFile(const GLchar *file, GLboolean 
     if (image == NULL)
     {
         SGL_Log("Texture not found: " + std::string(file));
-        return this->getTexture(SGL::DEFAULT_TEXTURE_NAME);
+        return this->getTexture(SGL::DEFAULT_TEXTURE);
     }
     else
     {

@@ -1,12 +1,18 @@
-// Author:  AlexHG @ XENOBYTE.XYZ
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://XENOBYTE.XYZ
+// Website: https://xenobyte.xyz/projects/?nav=skeletongl
 
 /**
  * @file    src/skeletonGL/window/SGL_Window.cpp
- * @author  AlexHG @ XENOBYTE.XYZ
- * @date    05/11/2020
- * @version 1.92
+ * @author  SENEX @ XENOBYTE.XYZ
+ * @date    26/01/2021
+ * @version 2.1
  *
  * @brief Main window manager, acts as the SGL framework's interface
  *
@@ -261,7 +267,7 @@ void SGL_Window::start()
         return;
 
     SGL_Log("(•̀ᴗ•́)و< \Initializing SkeletonGL ver. " + std::to_string(pSGLVERSION), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
-    SGL_Log("      <--o-- By AlexHG @ NEOHEX.XYZ --o-->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
+    SGL_Log("      <--o-- By SENEX @ XENOBYTE.XYZ --o-->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
 
     pHasMouseFocus = false;
     pHasKeyboardFocus = false;
@@ -450,7 +456,7 @@ void SGL_Window::start()
     // NOTE: if this function is skipped, it may still work since the resizeGL function reloads the FBO
     // however this only works under certain compilers that correctly load the FBO pointer, if run in gdb
     // it will always crash
-    this->startFBO(assetManager->getShader("postProcessor"));
+    this->startFBO(assetManager->getShader(SGL::DEFAULT_FRAMEBUFFER_SHADER));
     // Set internal opengl viewport size and reconfigure the framebuffer shader
     this->resizeGL(pWindowCreationSpecs.currentW, pWindowCreationSpecs.currentH);
     // Initialize the camera module (required for the projection matrix that be will parsed to the shaders)
@@ -463,7 +469,19 @@ void SGL_Window::start()
     SGL_Log("Camera and orthographic shader configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Configure renderer
     //this->pClearScreen = {1.0f, 1.0f, 1.0f, 1.0f};
-    renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getTexture(SGL::DEFAULT_TEXTURE_NAME), assetManager->getShader("line"), assetManager->getShader("point"), assetManager->getShader("text"), assetManager->getShader("spriteUV"), assetManager->getShader("spriteBatchUV"), assetManager->getShader("pixelBatch"), assetManager->getShader("lineBatch"));
+    renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getTexture(SGL::DEFAULT_TEXTURE),
+                                              assetManager->getTexture(SGL::INVISIBLE_TEXTURE),
+                                              assetManager->getTexture(SGL::DEFAULT_BMP_FONT_TEXTURE),
+                                              assetManager->getShader(SGL::DEFAULT_PIXEL_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_PIXEL_BATCH_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_LINE_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_LINE_BATCH_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_CIRCLE_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_CIRCLE_BATCH_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_SPRITE_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_SPRITE_BATCH_SHADER),
+                                              assetManager->getShader(SGL::DEFAULT_TEXT_SHADER));
+
     SGL_Log("Renderer configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Setup the post processor
     this->startFBO(pDefaultPPShader);
@@ -847,23 +865,24 @@ SGL_InputFrame SGL_Window::getFrameInput()
             }
         }
         // --- MOUSE --
+
         if (pEvent.type == SDL_MOUSEBUTTONDOWN)
         {
             if (pEvent.button.button == SDL_BUTTON_MIDDLE)
-                input.mouse.middleBtn.pressed = true;
+            { input.mouse.middleBtn.pressed = true; }
             if (pEvent.button.button == SDL_BUTTON_LEFT)
-                input.mouse.leftBtn.pressed = true;
+            { input.mouse.leftBtn.pressed = true; }
             if (pEvent.button.button == SDL_BUTTON_RIGHT)
-                input.mouse.rightBtn.pressed = true;
+            { input.mouse.rightBtn.pressed = true; }
         }
         if (pEvent.type == SDL_MOUSEBUTTONUP)
         {
             if (pEvent.button.button == SDL_BUTTON_MIDDLE)
-                input.mouse.middleBtn.released = true;
+            { input.mouse.middleBtn.released = true; }
             if (pEvent.button.button == SDL_BUTTON_LEFT)
-                input.mouse.leftBtn.released = true;
+            { input.mouse.leftBtn.released = true; }
             if (pEvent.button.button == SDL_BUTTON_RIGHT)
-                input.mouse.rightBtn.released = true;
+            { input.mouse.rightBtn.released = true; }
         }
         if (pEvent.type == SDL_MOUSEWHEEL)
         {
@@ -1111,47 +1130,108 @@ void SGL_Window::pLoadDefaultAssets()
     SGL_Log("<--- Default assets --->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
     assetManager = std::make_unique<SGL_AssetManager>(pOGLM);
 
-    std::string blankSquare = FOLDER_STRUCTURE::imagesDir + "blank_square.png";
-    std::string bmpFont = FOLDER_STRUCTURE::imagesDir + "default_bitmap_font.png";
-
-    assetManager->loadTexture(FOLDER_STRUCTURE::defaultTexture.c_str(), GL_FALSE, SGL::DEFAULT_TEXTURE_NAME);
-    assetManager->loadTexture(blankSquare.c_str(), GL_TRUE, "box");
-    assetManager->loadTexture(bmpFont.c_str(), GL_TRUE, "defaultBitmapFont");
+    assetManager->loadTexture(FOLDER_STRUCTURE::DEFAULT_TEXTURE_FILE.c_str(), GL_FALSE, SGL::DEFAULT_TEXTURE);
+    assetManager->loadTexture(FOLDER_STRUCTURE::DEFAULT_INVISIBLE_TEXTURE_FILE.c_str(), GL_TRUE, SGL::INVISIBLE_TEXTURE);
+    assetManager->loadTexture(FOLDER_STRUCTURE::DEFAULT_SQUARE_TEXTURE_FILE.c_str(), GL_TRUE, SGL::SQUARE_TEXTURE);
+    assetManager->loadTexture(FOLDER_STRUCTURE::DEFAULT_BMP_FONT_TEXTURE_FILE.c_str(), GL_TRUE, SGL::DEFAULT_BMP_FONT_TEXTURE);
 
     SGL_Log("Default textures loaded.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
 
     pOGLM->checkForGLErrors();
     // SGL_Log("Loading default shaders...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Load default shaders
-    std::string spriteUVV = FOLDER_STRUCTURE::shadersDir + "spriteUVV.c";
-    std::string spriteUVF = FOLDER_STRUCTURE::shadersDir + "spriteUVF.c";
-    std::string spriteBatchUVV = FOLDER_STRUCTURE::shadersDir + "spriteBatchUVV.c";
-    std::string spriteBatchUVF = FOLDER_STRUCTURE::shadersDir + "spriteBatchUVF.c";
-    std::string textV = FOLDER_STRUCTURE::shadersDir + "textV.c";
-    std::string textF = FOLDER_STRUCTURE::shadersDir + "textF.c";
-    std::string particleV = FOLDER_STRUCTURE::shadersDir + "particleV.c";
-    std::string particleF = FOLDER_STRUCTURE::shadersDir + "particleF.c";
-    std::string lineV = FOLDER_STRUCTURE::shadersDir + "lineV.c";
-    std::string lineF = FOLDER_STRUCTURE::shadersDir + "lineF.c";
-    std::string pointV = FOLDER_STRUCTURE::shadersDir + "pointV.c";
-    std::string pointF = FOLDER_STRUCTURE::shadersDir + "pointF.c";
-    std::string FBOshaderV = FOLDER_STRUCTURE::shadersDir + "frameBufferV.c";
-    std::string FBOshaderF = FOLDER_STRUCTURE::shadersDir + "frameBufferF.c";
-    std::string pixelBatchV = FOLDER_STRUCTURE::shadersDir + "pixelBatchV.c";
-    std::string pixelBatchF = FOLDER_STRUCTURE::shadersDir + "pixelBatchF.c";
-    std::string lineBatchV = FOLDER_STRUCTURE::shadersDir + "lineBatchV.c";
-    std::string lineBatchF = FOLDER_STRUCTURE::shadersDir + "lineBatchF.c";
+    // std::string spriteUVV = FOLDER_STRUCTURE::shadersDir + "spriteUVV.c";
+    // std::string spriteUVF = FOLDER_STRUCTURE::shadersDir + "spriteUVF.c";
+    // std::string spriteBatchUVV = FOLDER_STRUCTURE::shadersDir + "spriteBatchUVV.c";
+    // std::string spriteBatchUVF = FOLDER_STRUCTURE::shadersDir + "spriteBatchUVF.c";
+    // std::string textV = FOLDER_STRUCTURE::shadersDir + "textV.c";
+    // std::string textF = FOLDER_STRUCTURE::shadersDir + "textF.c";
+    // std::string lineV = FOLDER_STRUCTURE::shadersDir + "lineV.c";
+    // std::string lineF = FOLDER_STRUCTURE::shadersDir + "lineF.c";
+    // std::string FBOshaderV = FOLDER_STRUCTURE::shadersDir + "frameBufferV.c";
+    // std::string FBOshaderF = FOLDER_STRUCTURE::shadersDir + "frameBufferF.c";
+    // std::string pixelV = FOLDER_STRUCTURE::shadersDir + "pixelV.c";
+    // std::string pixelF = FOLDER_STRUCTURE::shadersDir + "pixelF.c";
+    // std::string pixelBatchV = FOLDER_STRUCTURE::shadersDir + "pixelBatchV.c";
+    // std::string pixelBatchF = FOLDER_STRUCTURE::shadersDir + "pixelBatchF.c";
+    // std::string lineBatchV = FOLDER_STRUCTURE::shadersDir + "lineBatchV.c";
+    // std::string lineBatchF = FOLDER_STRUCTURE::shadersDir + "lineBatchF.c";
+    // std::string circleV = FOLDER_STRUCTURE::shadersDir + "circleV.c";
+    // std::string circleF = FOLDER_STRUCTURE::shadersDir + "circleF.c";
+    // std::string circleBatchV = FOLDER_STRUCTURE::shadersDir + "circleBatchV.c";
+    // std::string circleBatchF = FOLDER_STRUCTURE::shadersDir + "circleBatchF.c";
 
-    assetManager->loadShaders(spriteUVV.c_str(), spriteUVF.c_str(), nullptr, "spriteUV", SHADER_TYPE::SPRITE);
-    assetManager->loadShaders(spriteBatchUVV.c_str(), spriteBatchUVF.c_str(), nullptr, "spriteBatchUV", SHADER_TYPE::SPRITE);
-    assetManager->loadShaders(textV.c_str(), textF.c_str(), nullptr, "text", SHADER_TYPE::TEXT);
-    assetManager->loadShaders(lineV.c_str(), lineF.c_str(), nullptr, "line", SHADER_TYPE::LINE);
-    assetManager->loadShaders(pointV.c_str(), pointF.c_str(), nullptr, "point", SHADER_TYPE::PIXEL);
-    assetManager->loadShaders(FBOshaderV.c_str(), FBOshaderF.c_str(), nullptr, "postProcessor", SHADER_TYPE::POST_PROCESSOR);
-    assetManager->loadShaders(pixelBatchV.c_str(), pixelBatchF.c_str(), nullptr, "pixelBatch", SHADER_TYPE::PIXEL);
-    assetManager->loadShaders(lineBatchV.c_str(), lineBatchF.c_str(), nullptr, "lineBatch", SHADER_TYPE::LINE);
 
-    pDefaultPPShader = assetManager->getShader("postProcessor");
+    // assetManager->loadShaders(spriteUVV.c_str(), spriteUVF.c_str(), nullptr, "spriteUV", SHADER_TYPE::SPRITE);
+    // assetManager->loadShaders(spriteBatchUVV.c_str(), spriteBatchUVF.c_str(), nullptr, "spriteBatchUV", SHADER_TYPE::SPRITE_BATCH);
+    // assetManager->loadShaders(textV.c_str(), textF.c_str(), nullptr, "text", SHADER_TYPE::TEXT);
+    // assetManager->loadShaders(lineV.c_str(), lineF.c_str(), nullptr, "line", SHADER_TYPE::LINE);
+    // assetManager->loadShaders(pixelV.c_str(), pixelF.c_str(), nullptr, "pixel", SHADER_TYPE::PIXEL);
+    // assetManager->loadShaders(pixelBatchV.c_str(), pixelBatchF.c_str(), nullptr, "pixelBatch", SHADER_TYPE::PIXEL_BATCH);
+    // assetManager->loadShaders(lineBatchV.c_str(), lineBatchF.c_str(), nullptr, "lineBatch", SHADER_TYPE::LINE_BATCH);
+    // assetManager->loadShaders(FBOshaderV.c_str(), FBOshaderF.c_str(), nullptr, "postProcessor", SHADER_TYPE::POST_PROCESSOR);
+
+
+    // // Default sprite shaders
+    // std::string spriteV = FOLDER_STRUCTURE::shadersDir + "spriteV.c";
+    // std::string spriteF = FOLDER_STRUCTURE::shadersDir + "spriteF.c";
+    // std::string spriteBatchV = FOLDER_STRUCTURE::shadersDir + "spriteBatchV.c";
+    // std::string spriteBatchF = FOLDER_STRUCTURE::shadersDir + "spriteBatchF.c";
+    // // Default pixel shaders
+    // std::string pixelV = FOLDER_STRUCTURE::shadersDir + "pixelV.c";
+    // std::string pixelF = FOLDER_STRUCTURE::shadersDir + "pixelF.c";
+    // std::string pixelBatchV = FOLDER_STRUCTURE::shadersDir + "pixelBatchV.c";
+    // std::string pixelBatchF = FOLDER_STRUCTURE::shadersDir + "pixelBatchF.c";
+    // // Default line shaders
+    // std::string lineV = FOLDER_STRUCTURE::shadersDir + "lineV.c";
+    // std::string lineF = FOLDER_STRUCTURE::shadersDir + "lineF.c";
+    // std::string lineBatchV = FOLDER_STRUCTURE::shadersDir + "lineBatchV.c";
+    // std::string lineBatchF = FOLDER_STRUCTURE::shadersDir + "lineBatchF.c";
+    // // Default circle shaders
+    // std::string circleV = FOLDER_STRUCTURE::shadersDir + "circleV.c";
+    // std::string circleF = FOLDER_STRUCTURE::shadersDir + "circleF.c";
+    // std::string circleBatchV = FOLDER_STRUCTURE::shadersDir + "circleBatchV.c";
+    // std::string circleBatchF = FOLDER_STRUCTURE::shadersDir + "circleBatchF.c";
+    // // Default text shaders
+    // std::string textV = FOLDER_STRUCTURE::shadersDir + "textV.c";
+    // std::string textF = FOLDER_STRUCTURE::shadersDir + "textF.c";
+    // // Default FBO shaders
+    // std::string fboV = FOLDER_STRUCTURE::shadersDir + "frameBufferV.c";
+    // std::string fboF = FOLDER_STRUCTURE::shadersDir + "frameBufferF.c";
+
+    assetManager->loadShaders(FOLDER_STRUCTURE::SPRITE_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::SPRITE_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_SPRITE_SHADER, SHADER_TYPE::SPRITE);
+    assetManager->loadShaders(FOLDER_STRUCTURE::SPRITE_BATCH_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::SPRITE_BATCH_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_SPRITE_BATCH_SHADER, SHADER_TYPE::SPRITE_BATCH);
+    assetManager->loadShaders(FOLDER_STRUCTURE::TEXT_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::TEXT_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_TEXT_SHADER, SHADER_TYPE::TEXT);
+    assetManager->loadShaders(FOLDER_STRUCTURE::LINE_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::LINE_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_LINE_SHADER, SHADER_TYPE::LINE);
+    assetManager->loadShaders(FOLDER_STRUCTURE::PIXEL_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::PIXEL_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_PIXEL_SHADER, SHADER_TYPE::PIXEL);
+    assetManager->loadShaders(FOLDER_STRUCTURE::PIXEL_BATCH_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::PIXEL_BATCH_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_PIXEL_BATCH_SHADER, SHADER_TYPE::PIXEL_BATCH);
+    assetManager->loadShaders(FOLDER_STRUCTURE::LINE_BATCH_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::LINE_BATCH_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_LINE_BATCH_SHADER, SHADER_TYPE::LINE_BATCH);
+    assetManager->loadShaders(FOLDER_STRUCTURE::FRAMEBUFFER_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::FRAMEBUFFER_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_FRAMEBUFFER_SHADER, SHADER_TYPE::POST_PROCESSOR);
+    // Circle shaders are just custom sprite shaders that use a transparent texture as a canvas for the fragment shader to draw a circle on
+    assetManager->loadShaders(FOLDER_STRUCTURE::CIRCLE_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::CIRCLE_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_CIRCLE_SHADER, SHADER_TYPE::SPRITE);
+    assetManager->loadShaders(FOLDER_STRUCTURE::CIRCLE_BATCH_SHADER_V_FILE.c_str(),
+                              FOLDER_STRUCTURE::CIRCLE_BATCH_SHADER_F_FILE.c_str(),
+                              nullptr, SGL::DEFAULT_CIRCLE_BATCH_SHADER, SHADER_TYPE::SPRITE_BATCH);
+
+    pDefaultPPShader = assetManager->getShader(SGL::DEFAULT_FRAMEBUFFER_SHADER);
     SGL_Log("Default shaders compiled and linked.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     pOGLM->checkForGLErrors();
 }

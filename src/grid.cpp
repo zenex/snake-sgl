@@ -1,6 +1,12 @@
-// Author:  AlexHG @ ZEN3X.COM
+// ╔═╗╦╔═╔═╗╦  ╔═╗╔╦╗╔═╗╔╗╔╔═╗╦
+// ╚═╗╠╩╗║╣ ║  ║╣  ║ ║ ║║║║║ ╦║
+// ╚═╝╩ ╩╚═╝╩═╝╚═╝ ╩ ╚═╝╝╚╝╚═╝╩═╝
+// ─┐ ┬┌─┐┌┐┌┌─┐┌┐ ┬ ┬┌┬┐┌─┐ ─┐ ┬┬ ┬┌─┐
+// ┌┴┬┘├┤ ││││ │├┴┐└┬┘ │ ├┤  ┌┴┬┘└┬┘┌─┘
+// ┴ └─└─┘┘└┘└─┘└─┘ ┴  ┴ └─┘o┴ └─ ┴ └─┘
+// Author:  SENEX @ XENOBYTE.XYZ
 // License: MIT License
-// Website: https://ZEN3X.COM
+// Website: https://xenobyte.xyz/projects/?nav=snake-sgl
 
 #include "grid.hpp"
 
@@ -222,10 +228,10 @@ bool Grid::renderTransition(SGL_Renderer &r, SGL_AssetManager &am)
 
     // }
 
-    pTiles[pTransitionTileAnimation]->sprite.shader = am.getShader("customSprite");
+    pTiles[pTransitionTileAnimation]->sprite.shader = am.getShader(SGL::DEFAULT_SPRITE_SHADER);
     r.renderSprite(pTiles[pTransitionTileAnimation]->sprite);
 
-    pTiles[(pTiles.size() - 1) - pTransitionTileAnimation]->sprite.shader = am.getShader("customSprite");
+    pTiles[(pTiles.size() - 1) - pTransitionTileAnimation]->sprite.shader = am.getShader(SGL::DEFAULT_SPRITE_SHADER);
     r.renderSprite(pTiles[(pTiles.size() -1) - pTransitionTileAnimation]->sprite);
 
     pTransitionTileAnimation++;
@@ -543,10 +549,10 @@ void Grid::render(SGL_Renderer &r, SGL_AssetManager &am)
 
 {
 
-    pHead.sprite.shader = am.getShader("customSprite");
+    pHead.sprite.shader = am.getShader(SGL::DEFAULT_SPRITE_SHADER);
     for (auto iter = pFood.begin(); iter != pFood.end(); iter++)
     {
-        (*iter)->sprite.shader = am.getShader("customSprite");
+        (*iter)->sprite.shader = am.getShader(SGL::DEFAULT_SPRITE_SHADER);
         r.renderSprite((*iter)->sprite);
     }
     for (auto iter = pBody.begin(); iter != pBody.end() ; ++iter)
