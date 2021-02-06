@@ -32,7 +32,7 @@
 
   2. Clone the Snake-SGL repo & play
   #+BEGIN_SRC 
-  git clone https://github.com/zenex/snake-sgl
+  git clone https://git.xenobyte.xyz/XENOBYTE/snake-sgl
   cd snake-sgl/
   make
   ./snake-sgl
